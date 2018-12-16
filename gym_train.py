@@ -1,14 +1,5 @@
 #!/usr/bin/env python
 # coding: utf8
-"""Example of training spaCy's named entity recognizer, starting off with an
-existing model or a blank model.
-
-For more details, see the documentation:
-* Training: https://spacy.io/usage/training
-* NER: https://spacy.io/usage/linguistic-features#named-entities
-
-Compatible with: spaCy v2.0.0+
-"""
 from __future__ import unicode_literals, print_function
 
 import plac
@@ -16,33 +7,29 @@ import random
 from pathlib import Path
 import spacy
 from spacy.util import minibatch, compounding
+import sys
+import data_reader
+import argparse
+import ast
 
+parser = argparse.ArgumentParser(description='Proccess excel file and train data')
+parser.add_argument('-f')
+parser.add_argument('-sh')
+parser.add_argument('-m')
+parser.add_argument('-o')
+args = vars(parser.parse_args())
 
 # training data
-TRAIN_DATA = [
-    ('Gyms with Crossfit in Sao Paulo', {
-        'entities': [(10, 18, 'EVENT'), (23, 31, 'LOC')]
-    }),
-    ('Gyms with Dance in Sao Paulo', {
-        'entities': [(9, 14, 'EVENT'), (19, 28, 'LOC')]
-    }),
-    ('Yoga in Sao Paulo', {
-        'entities': [(0, 4, 'EVENT'), (8, 16, 'LOC')]
-    }),
-    ('martial Arts hiit in Madrid', {
-        'entities': [(0, 12, 'EVENT'), (14, 17, 'EVENT'), (22, 27, 'LOC')]
-    }),
-    ('Bodybuilding and spinning.', {
-        'entities': [(0, 12, 'EVENT'), (18, 25, 'EVENT')]
-    })
-]
-
+TRAIN_DATA = data_reader.read_file(args['f'], args['sh'])
 
 @plac.annotations(
     model=("Model name. Defaults to blank 'en' model.", "option", "m", str),
+    file=("File of excel.", "option", "f", str),
+    sheet=("Sheetname of excel.", "option", "sh", str),
     output_dir=("Optional output directory", "option", "o", Path),
     n_iter=("Number of training iterations", "option", "n", int))
-def main(model=None, output_dir=None, n_iter=100):
+
+def main(model=None, output_dir=None, n_iter=100, file=None, sheet=None):
     """Load the model, set up the pipeline and train the entity recognizer."""
     if model is not None:
         nlp = spacy.load(model)  # load existing spaCy model
