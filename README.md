@@ -22,3 +22,5 @@ the sheetname.
   To consume API and check phrase entity recognition you just need to run:
    > python application_controller.py
    
+  And you can send a request to: localhost:3000/entity_recognition?query=anythingyouwant
+   
