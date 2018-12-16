@@ -18,7 +18,7 @@ class Nlp(Resource):
 
         return { 'ents': map(hashfy, text.ents) }
 
-api.add_resource(Nlp, '/test')
+api.add_resource(Nlp, '/entity_recognition')
 
 if __name__ == '__main__':
      app.run(port='3000')
