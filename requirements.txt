@@ -1,0 +1,9 @@
+numpy
+flask
+flask-jsonpify
+flask-sqlalchemy
+flask-restful
+argparse
+xlrd
+spacy
+nltk
